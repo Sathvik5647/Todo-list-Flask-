@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        /* Navbar */
+        .navbar {
+            width: 100%;
+            background: #222;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 50px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar h1 {
+            color: #fff;
+            font-size: 25px;
+            margin: 0;
+        }
+
+        .navbar .logout {
+            background: #d9534f;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .navbar .logout:hover {
+            background: #c9302c;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #181818;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Container */
+        .container {
+            width: 80%;
+            height: 90%;
+            position: relative;
+            top: 30px;
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Header */
+        .Welcome {
+            color: #fff;
+        }
+
+        a {
+            text-decoration: none;
+            color: #1e90ff;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Form */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 100px;
+        }
+
+        input,
+        textarea {
+            width: 50%;
+            padding: 10px;
+            background: #333;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #1e90ff;
+            width: 52%;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0073e6;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #222;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: #333;
+            color: #fff;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        /* Completed Task */
+        .completed td {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        /* Action Links */
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions a {
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .actions a.delete {
+            background-color: #d9534f;
+        }
+
+        .actions a.delete:hover {
+            background-color: #c9302c;
+        }
+
+        .actions a:not(.delete) {
+            background-color: #5cb85c;
+        }
+
+        .actions a:not(.delete):hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <body>
+        <nav class="navbar">
+            <h1>To-Do List</h1>
+            <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+        </nav>
+
+        <div class="container">
+            <h2 class="Welcome">Welcome, {{ user }}!</h2>
+
+            <form action="{{ url_for('add_entry') }}" method="POST">
+                <input type="text" name="title" placeholder="Title" required>
+                <textarea name="desc" placeholder="Description" required></textarea>
+                <button type="submit">Add To-Do</button>
+            </form>
+
+            <h2>Your To-Dos:</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Date Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                    <tr class="{{ 'completed' if entry.completed else '' }}">
+                        <td>{{ entry.title }}</td>
+                        <td>{{ entry.desc }}</td>
+                        <td>{{ entry.date_created }}</td>
+                        <td class="actions">
+                            <a href="{{ url_for('delete_entry', srno=entry.srno) }}" class="delete">Delete</a>
+                            <a href="{{ url_for('complete_task', srno=entry.srno) }}">
+                                {{ 'Mark Incomplete' if entry.completed else 'Mark Complete' }}
+                            </a>
+                            <a href="{{ url_for('update', srno=entry.srno) }}">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+
+</html>
