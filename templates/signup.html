@@ -19,7 +19,7 @@
 
     /* Navbar */
     .navbar {
-      width: 100%;
+      width: 97.4%;
       background: #222;
       padding: 15px 20px;
       display: flex;
@@ -148,15 +148,20 @@
   </div>
   {% endif %}
   <div class="container">
-
     <h2>Sign Up</h2>
     <form action="{{ url_for('signup') }}" method="POST">
+      {% if alert_message %}
+      <input type="text" name="username" placeholder="Username" value="{{username}}" required>
+      {% else %}
       <input type="text" name="username" placeholder="Username" required>
+      {% endif %}
       <input type="password" name="password" placeholder="Password" required>
       <input type="password" name="repassword" placeholder="Confirm Password" required>
       <button type="submit">Sign Up</button>
     </form>
     <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
   </div>
+  
+  
 
 </html>

@@ -8,7 +8,7 @@
     <style>
         /* Navbar */
         .navbar {
-            width: 100%;
+            width: 97.4%;
             background: #222;
             padding: 15px 20px;
             display: flex;
@@ -60,7 +60,6 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
-        /* Header */
         .Welcome {
             color: #fff;
         }
@@ -75,7 +74,6 @@
             text-decoration: underline;
         }
 
-        /* Form */
         form {
             display: flex;
             flex-direction: column;
@@ -107,8 +105,6 @@
         button:hover {
             background-color: #0073e6;
         }
-
-        /* Table */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -123,20 +119,16 @@
             color: #fff;
         }
 
-        th,
-        td {
+        th, td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #444;
         }
 
-        /* Completed Task */
-        .completed td {
+        .completed{
             text-decoration: line-through;
             color: #888;
         }
-
-        /* Action Links */
         .actions {
             display: flex;
             gap: 10px;
@@ -197,10 +189,10 @@
                 </thead>
                 <tbody>
                     {% for entry in entries %}
-                    <tr class="{{ 'completed' if entry.completed else '' }}">
-                        <td>{{ entry.title }}</td>
-                        <td>{{ entry.desc }}</td>
-                        <td>{{ entry.date_created }}</td>
+                    <tr>
+                        <td class="{{ 'completed' if entry.completed else '' }}">{{ entry.title }}</td>
+                        <td class="{{ 'completed' if entry.completed else '' }}">{{ entry.desc }}</td>
+                        <td class="{{ 'completed' if entry.completed else '' }}">{{ entry.date_created }}</td>
                         <td class="actions">
                             <a href="{{ url_for('delete_entry', srno=entry.srno) }}" class="delete">Delete</a>
                             <a href="{{ url_for('complete_task', srno=entry.srno) }}">

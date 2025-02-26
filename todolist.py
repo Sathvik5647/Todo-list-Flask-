@@ -43,6 +43,7 @@ def home():
 @app.route("/signup",methods=['GET','POST'])
 def signup():
     message=None
+    username=None
     if request.method=='POST':
         username=request.form.get('username')
         password=request.form.get('password')
@@ -61,11 +62,12 @@ def signup():
                 db.session.add(new_user)
                 db.session.commit()
                 return redirect('login')
-    return render_template('signup.html',alert_message=message)
+    return render_template('signup.html',alert_message=message,username=username)
 
 @app.route("/login",methods=['GET','POST'])
 def login():
     message=None
+    username=None
     if request.method=='POST':
         username=request.form.get('username')
         password=request.form.get('password')
@@ -80,12 +82,34 @@ def login():
                 return redirect(url_for('home'))
             else:
                 message="Invalid username or password"
-    return render_template('login.html',alert_message=message)
+    return render_template('login.html',alert_message=message,username=username)
 
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    message = None
+    if request.method == 'POST':
+        username = request.form.get('username')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        user = User.query.filter_by(username=username).first()
+        if not user:
+            message = "User not found"
+        elif new_password != confirm_password:
+            message = "Passwords do not match"
+        elif new_password == user.password:
+            message = "The password is already in use for this user"
+        else:
+            user.password = new_password
+            db.session.commit()
+            return redirect(url_for('login'))
+    return render_template('forgot_password.html', alert_message=message)
+
 
 
 @app.route('/add', methods=['POST'])
